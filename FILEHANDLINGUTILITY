@@ -1,0 +1,134 @@
+package internshipTasks;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class FileHandlingUtility {
+
+    // Method to read a text file
+    public static void readFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            System.out.println("Reading file: " + filePath);
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method to write to a text file
+    public static void writeFile(String filePath, String path) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(path);
+            System.out.println("Content written to file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    // Method to append to a text file
+    public static void appendToFile(String filePath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.newLine(); // Add a new line before appending
+            writer.write(content);
+            System.out.println("Content appended to file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error appending to file: " + e.getMessage());
+        }
+    }
+
+    // Method to modify a specific line in a text file
+    public static void modifyFile(String filePath, int lineNumber, String newContent) {
+        try {
+            // Read the file and store its content in a StringBuilder
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            StringBuilder fileContent = new StringBuilder();
+            String line;
+            int currentLine = 1;
+
+            while ((line = reader.readLine()) != null) {
+                if (currentLine == lineNumber) {
+                    fileContent.append(newContent).append("\n"); // Replace the line
+                } else {
+                    fileContent.append(line).append("\n");
+                }
+                currentLine++;
+            }
+            reader.close();
+
+            // Write the modified content back to the file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            writer.write(fileContent.toString());
+            writer.close();
+
+            System.out.println("Line " + lineNumber + " modified in file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error modifying file: " + e.getMessage());
+        }
+    }
+
+    // Main method with continuous menu using switch-case
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String filePath = "example.pdf.doc.txt"; // Default file path
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\nFile Handling Utility");
+            System.out.println("1. Read File");
+            System.out.println("2. Write to File");
+            System.out.println("3. Append to File");
+            System.out.println("4. Modify a Line in File");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option (1-5): ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    // Read file
+                    readFile(filePath);
+                    break;
+                case 2:
+                    // Write to file
+                    System.out.print("Enter content to write: ");
+                    String writeContent = scanner.nextLine();
+                    writeFile(filePath, writeContent);
+                    break;
+                case 3:
+                    // Append to file
+                    System.out.print("Enter content to append: ");
+                    String appendContent = scanner.nextLine();
+                    appendToFile(filePath, appendContent);
+                    break;
+                case 4:
+                    // Modify a line in file
+                    System.out.print("Enter line number to modify: ");
+                    int lineNumber = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    System.out.print("Enter new content: ");
+                    String newContent = scanner.nextLine();
+                    modifyFile(filePath, lineNumber, newContent);
+                    break;
+                case 5:
+                    // Exit the program
+                    System.out.println("Exiting the program. Goodbye!");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please choose a valid option (1-5).");
+            }
+        }
+
+        scanner.close();
+    }
+}
+	
+
+	      
+	    
+	
+
+
